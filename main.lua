@@ -34,12 +34,24 @@ local function Press(vk)
 	task.wait(1/10)
 end
 
-local function Drop_All_Items()
-	for _, item in next, backpack:GetChildren() do
-		if not item:IsA("Tool") then continue end
+local function Is_Compass(tool)
+	return string.match(tool.Name, "Compass") and not tool:FindFirstChild("CompassNeedle")
+end
+
+local function Has_Compass()
+	for _, tool in next, backpack:GetChildren() do
+		if Is_Compass(tool) then return tool end
+	end
+
+	return
+end
+
+local function Drop_Items(allow_compass)
+	for _, tool in next, backpack:GetChildren() do
+		if not tool:IsA("Tool") or ((not allow_compass) and Is_Compass(tool)) then continue end
 
 		pcall(function() 
-			humanoid:EquipTool(item) 
+			humanoid:EquipTool(tool) 
 			Press(0x08)
 		end)		
 	end
@@ -72,14 +84,6 @@ local function Test_Location(location)
 
 	task.wait(1)
 	return start, direction.Unit
-end
-
-local function Has_Compass()
-	for _, tool in next, backpack:GetChildren() do
-		if string.match(tool.Name, "Compass") and not tool:FindFirstChild("CompassNeedle") then return tool end
-	end
-
-	return
 end
 
 local function Solve_Compass()
@@ -118,7 +122,7 @@ local function Solve_Compass()
 	local rare_drop_location = Vector3.new(-1125, 225, -1425)
 	root.CFrame = CFrame.new(rare_drop_location, rare_drop_location + Vector3.new(0, 0, -3))
 	
-	Drop_All_Items()
+	Drop_Items()
 end
 
 local function Complete_All_Compasses()
@@ -145,7 +149,7 @@ local function Collect_Sam()
 	
 	root.CFrame = CFrame.new(fruit_drop_location, fruit_drop_location + Vector3.new(0, 0, -3))
 	task.wait(1/2)
-	Drop_All_Items()
+	Drop_Items()
 	task.wait(1/2)
 	root.CFrame = sam_root.CFrame * CFrame.new(0, 0, -3)
 	task.wait(1/2)
@@ -166,7 +170,7 @@ local function Collect_Fruits()
 	
 	root.CFrame = CFrame.new(fruit_drop_location, fruit_drop_location + Vector3.new(0, 0, -3))
 	task.wait(1/2)
-	Drop_All_Items()
+	Drop_Items()
 	
 	task.wait(1/2)
 end
