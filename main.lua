@@ -121,6 +121,18 @@ local function Solve_Compass()
 	Drop_All_Items()
 end
 
+local function Complete_All_Compasses()
+	humanoid:UnequipTools()
+
+	local compass = Has_Compass()
+	while compass do
+		humanoid:EquipTool(compass)
+		Solve_Compass()
+
+		compass = Has_Compass()
+	end
+end
+
 local function Run_Sam(arg1, arg2)
 	return Sam_Module["\t"](arg1, arg2)
 end
@@ -141,17 +153,6 @@ local function Collect_Sam()
 	Run_Sam("Sam", { "ClaimAmount", sam, 1 })
 	
 	local compass = backpack:WaitForChild("Compass", 10)
-	if not compass then return end
-	humanoid:UnequipTools()
-	
-	compass = Has_Compass()
-	while compass do
-		humanoid:EquipTool(compass)
-		Solve_Compass()
-		
-		compass = Has_Compass()
-	end
-	
 	task.wait(1/2)
 end
 
@@ -172,4 +173,4 @@ end
 
 Collect_Fruits()
 Collect_Sam()
-
+Complete_All_Compasses()
