@@ -164,8 +164,8 @@ local function Collect_Fruits()
 	for _, tool:Tool in next, workspace.MapFolder.Fruits:GetChildren() do
 		if not tool:IsA("Tool") then continue end
 
-		root.CFrame = tool.Handle.CFrame * CFrame.new(0, 2, 0)
-		task.wait(1/5)
+		root.CFrame = tool.Handle.CFrame * CFrame.new(0, 1, 0)
+		task.wait(1/30)
 	end
 	
 	root.CFrame = CFrame.new(fruit_drop_location, fruit_drop_location + Vector3.new(0, 0, -3))
@@ -175,6 +175,6 @@ local function Collect_Fruits()
 	task.wait(1/2)
 end
 
-Collect_Fruits()
 Collect_Sam()
 Complete_All_Compasses()
+Collect_Fruits()
